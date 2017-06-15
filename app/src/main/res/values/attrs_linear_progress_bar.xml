@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="LinearProgressBar2">
+        <attr name="colorSpeed" format="integer" />
+        <attr name="backgroundColor2" format="reference"/>
+        <attr name="animSpeed" format="integer"/>
+
+    </declare-styleable>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary1">#0288D1</color>
+    <color name="colorPrimaryDark1">#0271ac</color>
+    <color name="colorPrimaryDarker">#026ba3</color>
+    <color name="colorPrimaryDarkest">#025987</color>
+    <color name="colorPrimary">#4d526c</color>
+    <color name="colorPrimaryDark">#404459</color>
+    <color name="colorAccent">#aaafcf</color>
+    <color name="colorAccentLight">#c2c8ed</color>
+    <color name="colorPrimaryLight">#9298c1</color>
+    <color name="colorAccentDark">#737893</color>
+    <color name="colorAccentSelected">#c97b809c</color>
+    <color name="rippleColor">#b7b7b7</color>
+    <color name="rippleColorLight">#cccccc</color>
+    <color name="translucent">#00ffffff</color>
+    <color name="colorMarkerLabel">#404459</color>
+    <color name="colorMarkerTitle">#8b92ac</color>
+    <color name="colorMarkerSub">#4d526c</color>
+    <color name="backgroundColor">#074248</color>
+    <color name="buttonStrokeColor">#787878</color>
+    <color name="dividerColor">#acacac</color>
+    <color name="barIconSelected">#fff</color>
+    <color name="barIcon">#0271ac</color>
+    <color name="barColor">#0288D1</color>
+    <color name="dialogBackground">#b1282828</color>
+    <color name="sd">#7c819e</color>
+    <color name="white">#ffffff</color>
+    <color name="colorVoid">#f9f9f9</color>
+    <color name="cc">#d6d6d6b6</color>
+
+    <color name="loginButton">#b0363a4e</color>
+
+    <color name="black_overlay">#66000000</color>
+
+</resources>

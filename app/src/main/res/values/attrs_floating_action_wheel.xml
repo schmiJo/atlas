@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="FloatingActionWheel">
+        <attr name="backgroundColor" format="color" />
+        <attr name="extentionState" format="boolean" />
+        <attr name="itemsPerSector" format="integer" />
+
+    </declare-styleable>
+</resources>

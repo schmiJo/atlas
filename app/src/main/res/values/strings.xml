@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Atlas</string>
+    <string name="submit">submit</string>
+    <string name="downloading">Downloading</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="createAccount">create an account</string>
+    <string name="register">Register</string>
+    <string name="phoneNumber">Phonenumber/ Email</string>
+    <string name="noCameraPermissions">no camera permission</string>
+    <string name="loggingIn">logging in&#8230;</string>
+    <string name="loginEmpty">Enter both values</string>
+    <string name="loginWrongPass">Your password was wrong</string>
+    <string name="loginNotExist">Your phonenumber/email was wrong</string>
+    <string name="noNetwork">You have no internet connection</string>
+    <string name="cameraErrorPermission">You didn\'t allow atlas to use your camera.   </string>
+    <string name="boo">Booo!</string>
+    <string name="allow">Allow</string>
+    <string name="noCamera">No camera was found</string>
+    <string name="camError">Camera error :( </string>
+    <string name="friends">Friends</string>
+    <string name="events">Events</string>
+    <string name="posts">Posts</string>
+</resources>

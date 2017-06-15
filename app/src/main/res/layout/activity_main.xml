@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.atlas.atlas.main.MainLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="6dp"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimaryDark"
+    tools:openDrawer="end">
+
+
+
+    <FrameLayout
+        android:id="@+id/cameraLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+     <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/camContainer"
+         android:name="com.atlas.atlas.camera.CameraFragment"/>
+
+
+
+        <com.atlas.atlas.main.Shutter
+            android:id="@+id/shutter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+
+    </FrameLayout>
+
+
+
+
+    <com.atlas.atlas.main.CaptureButton
+        android:layout_width="100dp"
+
+        android:layout_height="100dp"
+        android:elevation="16dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:id="@+id/captureButton"
+        android:layout_marginBottom="32dp"
+        />
+
+
+
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/sheetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:elevation="4dp">
+
+        <include layout="@layout/main_sheet" />
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</com.atlas.atlas.main.MainLayout>

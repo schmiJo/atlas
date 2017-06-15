@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="CircleProgressBar">
+        <attr name="circleColor" format="color" />
+
+    </declare-styleable>
+</resources>

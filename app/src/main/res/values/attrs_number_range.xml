@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="NumberRangeView">
+        <attr name="backgroundBarColor" format="color" />
+        <attr name="selectorColor" format="color"/>
+        <attr name="unselectable" format="boolean"/>
+        <attr name="defaultValue" format="integer"/>
+        <attr name="startValue" format="integer"/>
+        <attr name="endValue" format="integer"/>
+    </declare-styleable>
+</resources>

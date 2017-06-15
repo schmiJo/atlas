@@ -1,0 +1,36 @@
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    tools:context="com.atlas.atlas.general.modeBar.ModeFragment"
+    android:layout_height="80dp">
+
+<FrameLayout
+    android:id="@+id/modeBlurView"
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialogBackground"
+    >
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="32dp"
+        android:id="@+id/modeRecycler"/>
+
+
+
+</FrameLayout>
+
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_close_modes"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="8dp"
+        android:id="@+id/modeButton"/>
+    </FrameLayout>
