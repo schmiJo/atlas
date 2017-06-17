@@ -19,6 +19,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -53,10 +54,14 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.atlas.atlas.R;
+import com.atlas.atlas.general.Utils;
+import com.atlas.atlas.general.modeBar.CameraModeFragment;
+import com.atlas.atlas.general.modeBar.ModeFragment;
 import com.atlas.atlas.main.MainActivity;
 import com.atlas.atlas.main.MainSheetBehavior;
 
@@ -75,8 +80,10 @@ import java.util.concurrent.TimeUnit;
 public class CameraFragment extends Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-
-    private ErrorListener errorListener;
+    public static byte MODE_CAM = 0;
+    public static byte MODE_FILTER = 0;
+    public static byte MODE_TIME = 0;
+    public static byte MODE_TEXT = 0;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final byte FLASH_ON = 0;
@@ -125,12 +132,16 @@ public class CameraFragment extends Fragment
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
+    private CameraModeFragment cameraModeFragment;
+    private ErrorListener errorListener;
     private long camChangeTime = System.currentTimeMillis();
     private Activity mainActivity;
     private byte flashState = FLASH_AUTO;
     private CameraAllowError cameraAllowError;
     private boolean onErrorFragment = false;
     private ImageButton flashButton;
+    private ViewGroup bottom;
+    private View layout;
     /**
      * ID of the current {@link CameraDevice}.
      */
@@ -208,6 +219,39 @@ public class CameraFragment extends Fragment
      * Orientation of the camera sensor
      */
     private int mSensorOrientation;
+    /**
+     * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
+     * {@link TextureView}.
+     */
+    private final TextureView.SurfaceTextureListener mSurfaceTextureListener
+            = new TextureView.SurfaceTextureListener() {
+
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
+
+            if (MainActivity.previousState != MainSheetBehavior.STATE_EXPANDED) {
+                closeCamera();
+                setUpCameraOutputs(mTextureView.getWidth(), mTextureView.getHeight());
+                openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            }
+
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
+            configureTransform(width, height);
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+        }
+
+    };
     private CameraCaptureSession.CaptureCallback mCaptureCallback
             = new CameraCaptureSession.CaptureCallback() {
 
@@ -307,39 +351,6 @@ public class CameraFragment extends Fragment
         }
 
     };
-    /**
-     * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
-     * {@link TextureView}.
-     */
-    private final TextureView.SurfaceTextureListener mSurfaceTextureListener
-            = new TextureView.SurfaceTextureListener() {
-
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-
-            if (MainActivity.previousState != MainSheetBehavior.STATE_EXPANDED) {
-                closeCamera();
-                setUpCameraOutputs(mTextureView.getWidth(), mTextureView.getHeight());
-                openCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            }
-
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
-            configureTransform(width, height);
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
-            return true;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
-        }
-
-    };
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
@@ -422,6 +433,10 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        SharedPreferences camPref =getActivity().getSharedPreferences("userGeneralInfo", Context.MODE_PRIVATE);
+        MODE_CAM = (byte)camPref.getInt("camMode",0);
+        MODE_FILTER = (byte) camPref.getInt("filterMode",0);
+        layout = view;
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mainActivity = getActivity();
         flashButton = (ImageButton) view.findViewById(R.id.flashButton);
@@ -451,6 +466,9 @@ public class CameraFragment extends Fragment
 
             }
         });
+
+
+        Utils.setMargins(view.findViewById(R.id.camModesContainer), 0, 0, 0, Utils.getSoftButtonsBarHeight(getActivity()));
 
         changeCamera = (ImageButton) view.findViewById(R.id.changeCamera);
 
@@ -650,7 +668,7 @@ public class CameraFragment extends Fragment
             CameraManager manager = (CameraManager) mainActivity.getSystemService(Context.CAMERA_SERVICE);
             try {
                 if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
-                  errorListener.onError();
+                    errorListener.onError();
                 }
 
                 if (mCameraDevice == null) {
@@ -976,7 +994,7 @@ public class CameraFragment extends Fragment
         }
     }
 
-    void removeErrorResult() {
+    public void removeErrorResult() {
 
 
         cameraAllowError.closeFragmentAnim(new CameraAllowError.AnimationListener() {
@@ -999,7 +1017,7 @@ public class CameraFragment extends Fragment
         return onErrorFragment;
     }
 
-    void showErrorResult() {
+    public void showErrorResult() {
         cameraAllowError = new CameraAllowError();
 
 
@@ -1014,10 +1032,88 @@ public class CameraFragment extends Fragment
 
     }
 
+    public void setErrorListener(ErrorListener errorListener) {
+        this.errorListener = errorListener;
+    }
+
+    public void showModes() {
+        if (bottom == null) bottom = (ViewGroup) layout.findViewById(R.id.camBottom);
+        bottom.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.camera_slide_out_buttons));
+        bottom.setVisibility(View.GONE);
+        if (cameraModeFragment == null) {
+            cameraModeFragment = CameraModeFragment.getInstance(ModeFragment.TYPE_CAM);
+
+
+        }
+        getFragmentManager().beginTransaction().replace(R.id.camModesContainer, cameraModeFragment).commit();
+
+
+    }
+
+    public void hideModesNoAnim() {
+        if (bottom == null) bottom = (ViewGroup) layout.findViewById(R.id.camBottom);
+        bottom.setVisibility(View.VISIBLE);
+        removeCamModes();
+
+    }
+
+
+    //  private void takePhoto() {
+    //      if (ActivityCompat.checkSelfPermission(mainActivity.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+    //          Toast.makeText(mainActivity.getApplicationContext(),"Boo no Permission",Toast.LENGTH_SHORT).show();
+    //          return;
+    //      }
+    //      manager.openCamera(mCameraId, new CameraDevice.StateCallback() {
+    //          @Override
+    //          public void onOpened(@NonNull CameraDevice camera) {
+//
+    //          }
+//
+    //          @Override
+    //          public void onDisconnected(@NonNull CameraDevice camera) {
+//
+    //          }
+//
+    //          @Override
+    //          public void onError(@NonNull CameraDevice camera, @IntDef(value = {CameraDevice.StateCallback.ERROR_CAMERA_IN_USE, CameraDevice.StateCallback.ERROR_MAX_CAMERAS_IN_USE, CameraDevice.StateCallback.ERROR_CAMERA_DISABLED, CameraDevice.StateCallback.ERROR_CAMERA_DEVICE, CameraDevice.StateCallback.ERROR_CAMERA_SERVICE}) int error) {
+//
+    //          }
+    //      }, mBackgroundHandler);
+    //  }
+
+    public byte getModeLayer() {
+        if (cameraModeFragment == null) return 0;
+        return cameraModeFragment.layer;
+    }
+
+    public void removeCamModes() {
+        getFragmentManager().beginTransaction().remove(cameraModeFragment).commit();
+    }
+
+    public void slideOutModes(){
+        cameraModeFragment.goDownLayer();
+    }
+
+    public void modeGoDownLayer(){
+        cameraModeFragment.goDownLayer();
+    }
+    public void startRemoveAnim() {
+
+        if (bottom == null) bottom = (ViewGroup) layout.findViewById(R.id.camBottom);
+        bottom.startAnimation(AnimationUtils.loadAnimation(
+
+                getActivity(), R.anim.camera_slide_in_buttons));
+        bottom.setVisibility(View.VISIBLE);
+    }
+
+    public interface ErrorListener {
+        void onError();
+    }
+
     /**
      * Compares two {@code Size}s based on their areas.
      */
-    static class CompareSizesByArea implements Comparator<Size> {
+    private static class CompareSizesByArea implements Comparator<Size> {
 
         @Override
         public int compare(Size lhs, Size rhs) {
@@ -1080,38 +1176,5 @@ public class CameraFragment extends Fragment
         }
 
     }
-
-    public void setErrorListener(ErrorListener errorListener) {
-        this.errorListener = errorListener;
-    }
-
-
-    //  private void takePhoto() {
-    //      if (ActivityCompat.checkSelfPermission(mainActivity.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-    //          Toast.makeText(mainActivity.getApplicationContext(),"Boo no Permission",Toast.LENGTH_SHORT).show();
-    //          return;
-    //      }
-    //      manager.openCamera(mCameraId, new CameraDevice.StateCallback() {
-    //          @Override
-    //          public void onOpened(@NonNull CameraDevice camera) {
-//
-    //          }
-//
-    //          @Override
-    //          public void onDisconnected(@NonNull CameraDevice camera) {
-//
-    //          }
-//
-    //          @Override
-    //          public void onError(@NonNull CameraDevice camera, @IntDef(value = {CameraDevice.StateCallback.ERROR_CAMERA_IN_USE, CameraDevice.StateCallback.ERROR_MAX_CAMERAS_IN_USE, CameraDevice.StateCallback.ERROR_CAMERA_DISABLED, CameraDevice.StateCallback.ERROR_CAMERA_DEVICE, CameraDevice.StateCallback.ERROR_CAMERA_SERVICE}) int error) {
-//
-    //          }
-    //      }, mBackgroundHandler);
-    //  }
-
-    public interface ErrorListener{
-        void onError();
-    }
-
 
 }

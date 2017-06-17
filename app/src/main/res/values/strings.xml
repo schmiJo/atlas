@@ -21,4 +21,18 @@
     <string name="friends">Friends</string>
     <string name="events">Events</string>
     <string name="posts">Posts</string>
+
+    <!-- _____MODES____ -->
+    <string name="pictures">Pictures</string>
+    <string name="video">Video</string>
+    <string name="noFilter">No filter</string>
+    <string name="sepia">Sepia</string>
+    <string name="blackNWhite">Black &amp; white</string>
+    <string name="noTime">No time</string>
+    <string name="clock">Clock</string>
+    <string name="watch">Watch</string>
+    <string name="noText">No text</string>
+    <string name="text">Text</string>
+    <string name="speechBubble">Speech bubble</string>
+
 </resources>

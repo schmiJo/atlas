@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:layout_gravity="bottom"
+    tools:context="com.atlas.atlas.general.modeBar.CameraModeFragment">
+
+
+    <FrameLayout
+        android:id="@+id/recycler2Layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/modeRecycler2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="4dp"
+            android:clipToPadding="false"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"/>
+
+        <View
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/modeCenterCircle"
+            android:background="@drawable/ic_select_circle" />
+
+        <TextView
+            android:id="@+id/modeRecyclerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textColor="@color/white"
+            android:textSize="13dp" />
+
+
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/modeRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="32dp"
+        android:clipToPadding="true"
+        android:paddingStart="14dp" />
+
+
+
+    <ImageView
+        android:id="@+id/modeButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="8dp"
+        android:padding="6dp"
+        android:src="@drawable/ic_close_white_24dp" />
+
+
+</FrameLayout>

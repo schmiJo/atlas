@@ -12,28 +12,76 @@ import java.util.List;
 
 
 public class ModeRecyclerAdapter extends RecyclerView.Adapter<ModeBubbleViewHolder> {
-
-    private Context context;
-    private List<ModeBubbleStruct> modes;
     private byte type;
+    private Context context;
+    private int position = -1;
+    private List<ModeBubbleScript> modes;
 
-    public ModeRecyclerAdapter(Context context, byte type) {
-        this.context = context;
+    public ModeRecyclerAdapter(byte type, Context context, int position) {
         this.type = type;
+        this.context = context;
+        this.position = position;
 
-        switch (type) {
-            case ModeFragment.TYPE_EARTH:
-                modes = new ArrayList<>(3);
-                modes.add(0, new ModeBubbleStruct(R.drawable.mode_friends, R.string.friends,false));
-                modes.add(1, new ModeBubbleStruct(R.drawable.mode_posts, R.string.posts, false));
-                modes.add(2, new ModeBubbleStruct(R.drawable.mode_events, R.string.events, false));
-                break;
+        modes = new ArrayList<>(5);
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
 
-            default: modes = new ArrayList<>(0);
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
 
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
 
 
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        modes.add(new ModeBubbleScript(R.drawable.mode_friends));
+        int internalPosition = position;
+        switch (type){
+
+            case ModeFragment.TYPE_CAM:
+                internalPosition--;
+                if(position == 0){
+                    //the mode where you select the cam mode
+
+                }
+
+                case ModeFragment.TYPE_PREVIEW:
+
+                    switch (internalPosition){
+                        case 0:{
+                            //the filterMOde
+
+                        }
+                        case 1:{
+                            //the clockMode
+
+
+                        }
+                        case 2:{
+                            //the textMode
+
+                        }
+                    }
         }
+    }
+
+    public ModeRecyclerAdapter(byte type, Context context) {
+        this.type = type;
+        this.context = context;
+        //the select Layout
+
+        modes = new ArrayList<>(5);
+        modes.add(new ModeBubbleScript(R.drawable.mode_posts));
+
+        modes.add(new ModeBubbleScript(R.drawable.mode_posts));
+
+        modes.add(new ModeBubbleScript(R.drawable.mode_posts));
+
+        modes.add(new ModeBubbleScript(R.drawable.mode_posts));
+
+
     }
 
     @Override
@@ -43,9 +91,7 @@ public class ModeRecyclerAdapter extends RecyclerView.Adapter<ModeBubbleViewHold
 
     @Override
     public void onBindViewHolder(ModeBubbleViewHolder holder, int position) {
-        ModeBubbleStruct mode = modes.get(position);
-        holder.getCircleImageView().setImageResource(mode.getDrawableId());
-        holder.getTextView().setText(mode.getStringId());
+        holder.getCircleImageView().setImageResource(modes.get(0).getResourceId());
     }
 
     @Override

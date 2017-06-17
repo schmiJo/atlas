@@ -1,36 +1,43 @@
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="75dp"
+    tools:context="com.atlas.atlas.general.modeBar.ModeFragment">
 
-    tools:context="com.atlas.atlas.general.modeBar.ModeFragment"
-    android:layout_height="80dp">
 
-<FrameLayout
-    android:id="@+id/modeBlurView"
-    android:visibility="gone"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dialogBackground"
-    >
+    <FrameLayout
+        android:id="@+id/modeBlurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/image_top"
+        android:visibility="invisible"
+        />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/modeRecycler"
+        android:paddingStart="14dp"
+        android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="32dp"
-        android:id="@+id/modeRecycler"/>
+        android:visibility="invisible" />
 
 
-
-</FrameLayout>
-
-
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="18dp"
-        android:src="@drawable/ic_close_modes"
+    <FrameLayout
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="8dp"
-        android:id="@+id/modeButton"/>
+        android:layout_marginBottom="6dp"
+        android:id="@+id/modeImageLayout"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/modeButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="6dp"
+            android:layout_gravity="center"
+            android:src="@drawable/animated_mode_arrow" />
     </FrameLayout>
+</FrameLayout>

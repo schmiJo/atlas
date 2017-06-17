@@ -27,9 +27,4 @@ class SplashActivity : Activity() {
         finish()
     }
 
-    companion object {
-
-        val class2: Class<*>
-            get() = SplashActivity::class.java
-    }
 }

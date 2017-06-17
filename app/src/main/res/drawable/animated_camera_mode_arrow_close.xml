@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+
+    android:drawable="@drawable/ic_mode_arrow_close"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <target
+        android:animation="@animator/mode_3_to_6"
+        android:name="left"/>
+    <target
+        android:animation="@animator/mode_min3_to_min6"
+        android:name="right"
+        />
+
+
+    </animated-vector>

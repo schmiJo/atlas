@@ -35,4 +35,6 @@ public class EarthFragment extends Fragment {
         super.onResume();
         earthView.onResume();
     }
+
+
 }
