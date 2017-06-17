@@ -24,6 +24,8 @@ import com.atlas.atlas.camera.CameraFragment;
 import com.atlas.atlas.general.RecyclerTouchListener;
 import com.atlas.atlas.general.Utils;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * The camera mode bar that is used in the camera fragment and the preview actvity
  */
@@ -96,7 +98,7 @@ public class CameraModeFragment extends ModeFragment {
             }
         });
 
-        final ModeRecyclerAdapter recyclerAdapter = new ModeRecyclerAdapter(type, getActivity());
+        ModeRecyclerAdapter recyclerAdapter = new ModeRecyclerAdapter(type, getActivity());
         recyclerView = (RecyclerView) layout.findViewById(R.id.modeRecycler);
         recyclerTouchListener = new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -115,20 +117,17 @@ public class CameraModeFragment extends ModeFragment {
                 recyclerView2.setAdapter(adapter);
                 recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 switch (layerPosition) {
+
                     case 0:
-                        recyclerView2.scrollToPosition(CameraFragment.MODE_CAM);
-                        modeSetteled(CameraFragment.MODE_CAM);
-                        break;
-                    case 1:
 
                         modeSetteled(CameraFragment.MODE_FILTER);
                         recyclerView2.scrollToPosition(CameraFragment.MODE_FILTER);
                         break;
-                    case 2:
+                    case 1:
                         modeSetteled(CameraFragment.MODE_TIME);
                         recyclerView2.scrollToPosition(CameraFragment.MODE_TIME);
                         break;
-                    case 3:
+                    case 2:
                         modeSetteled(CameraFragment.MODE_TEXT);
                         recyclerView2.scrollToPosition(CameraFragment.MODE_TEXT);
                         break;
@@ -210,6 +209,9 @@ public class CameraModeFragment extends ModeFragment {
         if (recyclerView2 != null && recyclerTouchListener2 != null) {
             recyclerView2.removeOnItemTouchListener(recyclerTouchListener2);
             recyclerView2.removeOnScrollListener(recycler2ScrollListner);
+            recyclerView2 = null;
+            recycler2ScrollListner = null;
+            recycler2Layout = null;
         }
 
     }
@@ -220,29 +222,13 @@ public class CameraModeFragment extends ModeFragment {
 
     private void modeSetteled(int position) {
         downOnClick = true;
+
+
+        CircleImageView circleImageView = ((ModeBubbleViewHolder) recyclerView.findViewHolderForAdapterPosition(layerPosition)).getCircleImageView();
         switch (layerPosition) {
+
             case 0: {
 
-                {
-                    SharedPreferences camPref = getActivity().getSharedPreferences("userGeneralInfo", Context.MODE_PRIVATE);
-                    camPref.edit().putInt("camMode", position).apply();
-
-                }
-                modeChangeListener.camModeChanged(position);
-                CameraFragment.MODE_CAM = (byte) position;
-                switch (position) {
-                    case 0:
-
-                        modeRecyclerText.setText(R.string.pictures);
-                        break;
-                    case 1:
-                        modeRecyclerText.setText(R.string.video);
-                        break;
-                }
-
-                break;
-            }
-            case 1: {
 
                 {
                     SharedPreferences camPref = getActivity().getSharedPreferences("userGeneralInfo", Context.MODE_PRIVATE);
@@ -254,20 +240,23 @@ public class CameraModeFragment extends ModeFragment {
                 modeChangeListener.filterModeChanged(position);
                 switch (position) {
                     case 0:
-
+                        circleImageView.setImageResource(R.drawable.mode_cam_nofilter);
                         modeRecyclerText.setText(R.string.noFilter);
                         break;
                     case 1:
+                        circleImageView.setImageResource(R.drawable.mode_cam_blacknwhite);
                         modeRecyclerText.setText(R.string.blackNWhite);
                         break;
                     case 2:
+
+                        circleImageView.setImageResource(R.drawable.mode_cam_sepia);
                         modeRecyclerText.setText(R.string.sepia);
                         break;
 
                 }
                 break;
             }
-            case 2:
+            case 1:
 
 
                 CameraFragment.MODE_TIME = (byte) position;
@@ -276,29 +265,35 @@ public class CameraModeFragment extends ModeFragment {
                     case 0:
 
                         modeRecyclerText.setText(R.string.noTime);
+                        circleImageView.setImageResource(R.drawable.mode_cam_notime);
                         break;
                     case 1:
                         modeRecyclerText.setText(R.string.clock);
+                        circleImageView.setImageResource(R.drawable.mode_cam_clock);
                         break;
                     case 2:
                         modeRecyclerText.setText(R.string.watch);
+                        circleImageView.setImageResource(R.drawable.mode_cam_watch);
                         break;
                 }
 
                 break;
-            case 3:
+            case 2:
 
                 CameraFragment.MODE_TEXT = (byte) position;
                 modeChangeListener.textModeChanged(position);
                 switch (position) {
                     case 0:
                         modeRecyclerText.setText(R.string.noText);
+                        circleImageView.setImageResource(R.drawable.mode_cam_notext);
                         break;
                     case 1:
                         modeRecyclerText.setText(R.string.text);
+                        circleImageView.setImageResource(R.drawable.mode_cam_text);
                         break;
                     case 2:
                         modeRecyclerText.setText(R.string.speechBubble);
+                        circleImageView.setImageResource(R.drawable.mode_cam_speechbubble);
                         break;
                 }
                 break;
@@ -348,12 +343,13 @@ public class CameraModeFragment extends ModeFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(!ignoreScroll) {
+                if (!ignoreScroll) {
                     downOnClick = false;
 
-                }else{
-                ignoreScroll = false;
-            }}
+                } else {
+                    ignoreScroll = false;
+                }
+            }
         };
 
         recyclerView2.addOnScrollListener(recycler2ScrollListner);
@@ -372,7 +368,6 @@ public class CameraModeFragment extends ModeFragment {
     }
 
     public interface ModeChangeListener {
-        void camModeChanged(int position);
 
         void filterModeChanged(int position);
 

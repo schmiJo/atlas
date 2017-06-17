@@ -33,6 +33,8 @@
     <string name="watch">Watch</string>
     <string name="noText">No text</string>
     <string name="text">Text</string>
+    <string name="time">Time</string>
+    <string name="filter">Filter</string>
     <string name="speechBubble">Speech bubble</string>
 
 </resources>

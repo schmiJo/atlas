@@ -218,11 +218,6 @@ public class MainActivity extends AppCompatActivity implements CameraModeFragmen
     }
 
     @Override
-    public void camModeChanged(int position) {
-
-    }
-
-    @Override
     public void filterModeChanged(int position) {
 
     }

@@ -79,10 +79,10 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
                 android:id="@+id/camModeView"
-                android:src="@drawable/ic_cam_white_dp38"
+                android:src="@drawable/ic_mode_dp24"
                 android:onClick="openCamModes"
                 android:layout_gravity="center"
                 />

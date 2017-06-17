@@ -20,9 +20,6 @@ import com.atlas.atlas.general.Utils;
 
 public class CaptureButton extends View {
 
-    public static final byte STATE_PIC = 0;
-    public static final byte STATE_VID = 1;
-    public static byte state_mode = STATE_PIC;
     static final byte STATE_SHUTTER = 0;
     static final byte STATE_NORMAL = 2;
 
@@ -37,11 +34,6 @@ public class CaptureButton extends View {
     private byte captureState = CAPTURE_NONE;
     private Control control;
     private byte currentState = STATE_NORMAL;
-    private Bitmap earth, contact;
-    private int earthAlpha = 0;
-    private byte setEartAlpha = 0;
-    private int profileAlpha = 0;
-    private int setProfileAlpha = 0;
     private float circleRadius;
     private float radiusAdd;
     private int heightDiv2 = 0, widthDiv2 = 0;
@@ -98,57 +90,8 @@ public class CaptureButton extends View {
             heightDiv2 = canvas.getHeight() / 2;
         }
 
-        if (setEartAlpha != 0) {
-            if (setEartAlpha == 1) {
-                //increase
-                if (earthAlpha + earthAnimSpeed < 255) {
-                    earthAlpha = earthAlpha + earthAnimSpeed;
-                } else {
-                    earthAlpha = 255;
-                    setEartAlpha = 0;
-                }
-
-
-            } else {
-                //decrease
-                if (earthAlpha - earthAnimSpeed > 0) {
-                    earthAlpha = earthAlpha - earthAnimSpeed;
-                } else {
-                    earthAlpha = 0;
-                    setEartAlpha = 0;
-                }
-
-
-            }
-            earthPaint.setAlpha(earthAlpha);
-            invalidate();
-        }
-
-        if(setProfileAlpha != 0){
-            if(setProfileAlpha ==1){
-
-                if (profileAlpha + earthAnimSpeed < 255) {
-                    profileAlpha = profileAlpha + earthAnimSpeed;
-                } else {
-                    profileAlpha = 255;
-                    setProfileAlpha = 0;
-                }
-
-            }else{
-
-
-                if (profileAlpha - earthAnimSpeed > 0) {
-                    profileAlpha = profileAlpha - earthAnimSpeed;
-                } else {
-                    profileAlpha = 0;
-                    setProfileAlpha = 0;
-                }
-            }
-
-            contactPaint.setAlpha(profileAlpha);
-            invalidate();
-        }
         switch (currentState) {
+
             case STATE_SHUTTER:
 
                 switch (captureState) {
@@ -240,7 +183,7 @@ public class CaptureButton extends View {
         switch (event.getActionMasked()) {
 
             case MotionEvent.ACTION_BUTTON_RELEASE:
-                case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_OUTSIDE:
             case MotionEvent.ACTION_HOVER_EXIT:
                 if(currentState != STATE_SHUTTER){
@@ -283,6 +226,7 @@ public class CaptureButton extends View {
                     case STATE_NORMAL:
 
                         if (inCircle(x, y, widthDiv2, heightDiv2, circleRadius)) {
+                            currentState = STATE_SHUTTER;
                             control.goToCam();
                         }
 
@@ -326,6 +270,7 @@ public class CaptureButton extends View {
 
     void setState(byte newState) {
 
+
         currentState = newState;
         invalidate();
     }
@@ -336,7 +281,7 @@ public class CaptureButton extends View {
         invalidate();
     }
 
-     static boolean isRecording() {
+    static boolean isRecording() {
         return recording;
     }
 
